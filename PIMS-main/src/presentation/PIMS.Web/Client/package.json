@@ -16,9 +16,8 @@
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "axios": "^1.6.8",
     "jose": "^4.14.4",
-    "pdfjs-dist": "^4.1.392",
-    "pinia": "^2.1.6",
-    "vue": "^3.3.4",
+    "pdfjs-dist": "^4.2.67",
+    "pinia": "^2.1.7",
     "vue-router": "^4.2.4",
     "vuetify": "^3.3.22"
   },
@@ -39,6 +38,8 @@
     "typescript": "~5.1.6",
     "vite": "^4.4.9",
     "vite-plugin-mkcert": "^1.16.0",
+    "vue": "^3.2.25",
+    "vue-property-decorator": "^9.1.2",
     "vue-tsc": "^1.8.8"
   }
 }

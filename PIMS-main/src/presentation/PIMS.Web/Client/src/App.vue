@@ -1,11 +1,11 @@
-<script lang="ts" setup>
-  import SearchResults from '../src/views/user/SearchResults.vue';
+<script  setup>
+  import SearchComponent from './components/SearchComponent.vue';
   
 </script>
 
 <template>
   <v-app>
-    <SearchResults/>
+    <SearchComponent/>
     
     <v-main>
       <router-view />

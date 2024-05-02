@@ -24,6 +24,10 @@ export type User = {
   UserName: string
   
 }
+export type SearchResults = {
+  searchResults: string
+  
+}
 export type FormsRegisterRequest = {
   UserName: string
   Password: string
@@ -53,6 +57,10 @@ export async function registerFromForms(
   return await api.post<AuthenticationResponse>('FormsAuthentication/register', register)
   
 }
+export async function searchpdf() {
+  return await api.get<SearchResults>('PdfController/search-pdf')
+}
+
 export function getToken() {
   return localStorage.getItem(key)
 }
