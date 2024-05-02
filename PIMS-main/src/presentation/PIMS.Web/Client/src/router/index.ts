@@ -46,14 +46,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/testp',
-      name: 'testp',
-      component: import('../views/test/TestProfileView.vue'),
-      meta: {
-        requiresAuth: false
-      }
-    },
-    {
       path: '/testdoc',
       name: 'testdoc',
       component: import('../views/test/DocumentTest.vue'),

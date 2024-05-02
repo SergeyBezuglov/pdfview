@@ -1,23 +1,20 @@
 <template>
-  <div class="search-container">
-    <h1 class="title">PDF Search Engine</h1>
-    <div class="search-box">
-      <input v-model="searchParams.author" placeholder="Author" class="search-input">
-      <input v-model="searchParams.publisher" placeholder="Publisher" class="search-input">
-      <input v-model="searchParams.keywords" placeholder="Keywords" class="search-input">
-      <button @click="searchDocuments" class="search-button">Search</button>
-    </div>
-    <div v-if="documents.length > 0" class="results-container">
-      <div v-for="doc in documents" :key="doc.filePath" class="result-item">
-        <h5>{{ doc.title }}</h5>
-        <p>{{ doc.author }}</p>
-        <p>{{ doc.publisher }}</p>
-        <button @click="downloadFile(doc.filePath)">Download</button>
-        <iframe :src="'/pdfs/' + doc.filePath" class="pdf-preview"></iframe>
-      </div>
-    </div>
-    <div v-else class="no-results">No results found.</div>
+  <!--... -->
+  <div class="search-box">
+    <input v-model="query" placeholder="Search Query" class="search-input" @keyup.enter="searchPdf">
+    <button @click="searchPdf" class="search-button">Search</button>
   </div>
+  <!--... -->
+  <div v-if="searchResults.length > 0" class="results-container">
+    <div v-for="result in searchResults" :key="result" class="result-item">
+      <h3>{{ result }}</h3>
+      <div class="preview-container">
+        <iframe :src="`/api/download-pdf?fileName=${result}`" class="pdf-preview"></iframe>
+      </div>
+      <button @click="downloadPdf(result)" class="download-button">Download</button>
+    </div>
+  </div>
+  <!--... -->
 </template>
 
 <script>
@@ -26,24 +23,21 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      searchParams: {
-        author: '',
-        publisher: '',
-        keywords: ''
-      },
-      documents: []
+      query: '',
+      searchResults: []
     };
   },
   methods: {
-    searchDocuments() {
-      axios.get('/api/search', { params: this.searchParams })
-        .then(response => {
-          this.documents = response.data;
-        })
-        .catch(error => console.error('Error:', error));
+    async searchPdf() {
+      try {
+        const response = await axios.get('http://localhost:7085/api/search-pdf', { params: { query: this.query } });
+        this.searchResults = response.data;
+      } catch (error) {
+        console.error('Error:', error);
+      }
     },
-    downloadFile(filePath) {
-      window.open(`/api/download/${filePath}`, '_blank');
+    downloadFile(fileName) {
+      window.open(`/api/download-pdf?fileName=${fileName}`, '_blank');
     }
   }
 }

@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.13.8" />
     <PackageReference Include="Elasticsearch.Net" Version="7.17.5" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="Mapster" Version="7.4.0-pre06" />
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1-pre02" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
@@ -23,6 +24,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0-preview.7.23375.6" />
     <PackageReference Include="NEST" Version="7.17.5" />
     <PackageReference Include="PdfPig" Version="0.1.8" />
+    <PackageReference Include="PDFsharp" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     <PackageReference Include="Vite.AspNetCore" Version="1.9.3" />
   </ItemGroup>
