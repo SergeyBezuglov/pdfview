@@ -74,7 +74,8 @@ namespace PIMS.Web
                 options.AddPolicy("MyPolicy", builder =>
                     builder.WithOrigins("http://localhost:5173") // Укажите здесь порт вашего фронтенда
                            .AllowAnyMethod()
-                           .AllowAnyHeader());
+                           .AllowAnyHeader()
+                           .AllowCredentials());
             });
 
            

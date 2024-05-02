@@ -50,6 +50,7 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
         /// </summary>
         /// <value>Значение набора баз данных (DbSet).</value>
         public DbSet<EventLog> EventLog { get; set; } = null!;
+        public DbSet<PdfDocumentData> PdfDocumentData { get; set; }= null!;
 
         /// <summary>
         /// Создание модели.
