@@ -69,14 +69,6 @@ namespace PIMS.Web
             services.Configure<ApiBehaviorOptions>(options =>
                options.SuppressModelStateInvalidFilter = true
            );
-            services.AddCors(options =>
-            {
-                options.AddPolicy("MyPolicy", builder =>
-                    builder.WithOrigins("http://localhost:5173") // Укажите здесь порт вашего фронтенда
-                           .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials());
-            });
 
            
 

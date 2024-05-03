@@ -11,7 +11,7 @@ namespace PIMS.Web.Controllers.v1
     public class PdfController : ControllerBase
     {
         [HttpGet("search-pdf")]
-        public IActionResult SearchPdf(string query)
+        public IActionResult SearchPdf([FromQuery] string query)
         {
             try
             {
@@ -66,7 +66,9 @@ namespace PIMS.Web.Controllers.v1
                 {
                     text.Append(PdfTextExtractor.GetTextFromPage(reader, i));
                 }
-                return text.ToString().ToLowerInvariant().Contains(query.ToLowerInvariant());
+                bool contains = text.ToString().ToLowerInvariant().Contains(query.ToLowerInvariant());
+                Console.WriteLine($"Searching in: {filePath} Found: {contains}");
+                return contains;
             }
         }
     }

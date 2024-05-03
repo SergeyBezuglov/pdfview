@@ -28,8 +28,8 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 
 
 });
-var settings = new ConnectionSettings(new Uri("http://localhost:9200")) // Укажите правильный URI к вашему Elasticsearch
-    .DefaultIndex("your_default_index"); // Укажите индекс по умолчанию
+var settings = new ConnectionSettings(new Uri("http://localhost:5173")) // Укажите правильный URI к вашему Elasticsearch
+    .DefaultIndex("index.html"); // Укажите индекс по умолчанию
 
 var client = new ElasticClient(settings);
 builder.Services.AddSingleton<IElasticClient>(client);
@@ -39,7 +39,16 @@ builder.Services.AddSingleton<IElasticClient>(client);
     AddApplication().
     AddInfrastracture(builder); 
 }
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyAllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("https://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 var app = builder.Build();
 {
      
@@ -68,15 +77,9 @@ var app = builder.Build();
 	{
 		Log.Fatal(exp, "While loading spa static files module");
 	}
-	app.UseHttpsRedirection();
-
+    app.UseHttpsRedirection();
+    app.UseCors("MyAllowSpecificOrigins");
     app.UseRouting();
-    app.UseCors(b =>
-    {
-        b.AllowAnyOrigin();
-        b.AllowAnyHeader();
-        b.AllowAnyMethod();
-    });
     app.UseAuthentication();
 
     app.UseAuthorization();
@@ -98,7 +101,7 @@ var app = builder.Build();
     app.MapControllers();
     app.ConfigureSPA();
     app.UseStaticFiles();
-    app.UseCors("MyPolicy");
+    
     app.Run();
 
 

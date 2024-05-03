@@ -38,7 +38,7 @@ export default {
       }
     },
     async loadPdf(fileName) {
-      const pdfDoc = await this.loadPdfFile(`http://localhost:7085/pdfcontroller/download-pdf?fileName=${fileName}`);
+      const pdfDoc = await this.loadPdfFile(`https://localhost:7085/Pdf/download-pdf?fileName=${fileName}`);
       if (pdfDoc) {
         this.pdfDoc = pdfDoc;
         this.totalPages = pdfDoc.numPages;
