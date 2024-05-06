@@ -11,7 +11,7 @@ namespace PIMS.Web.Controllers.v1
     public class PdfController : ControllerBase
     {
         [HttpGet("search-pdf")]
-        public IActionResult SearchPdf([FromQuery] string query)
+        public IActionResult SearchPdf([FromQuery] SearchParams searchParams)
         {
             try
             {
@@ -19,7 +19,7 @@ namespace PIMS.Web.Controllers.v1
                 var searchResults = new List<string>();
                 foreach (var pdfFile in pdfFiles)
                 {
-                    if (PdfContainsQuery(pdfFile, query))
+                    if (PdfContainsQuery(pdfFile, searchParams))
                     {
                         searchResults.Add(System.IO.Path.GetFileName(pdfFile));
                     }
@@ -30,9 +30,9 @@ namespace PIMS.Web.Controllers.v1
             {
                 return StatusCode(500, $"Internal server error: {ex}");
             }
-        }
 
-        [HttpGet("download-pdf")]
+        }
+            [HttpGet("download-pdf")]
         public IActionResult DownloadPdf(string fileName)
         {
             try
@@ -57,7 +57,7 @@ namespace PIMS.Web.Controllers.v1
                 return StatusCode(500, $"Internal server error: {ex}");
             }
         }
-        private bool PdfContainsQuery(string filePath, string query)
+        private bool PdfContainsQuery(string filePath, SearchParams searchParams)
         {
             using (PdfReader reader = new PdfReader(filePath))
             {
@@ -66,10 +66,35 @@ namespace PIMS.Web.Controllers.v1
                 {
                     text.Append(PdfTextExtractor.GetTextFromPage(reader, i));
                 }
-                bool contains = text.ToString().ToLowerInvariant().Contains(query.ToLowerInvariant());
-                Console.WriteLine($"Searching in: {filePath} Found: {contains}");
-                return contains;
+                var content = text.ToString().ToLowerInvariant();
+
+                // Формируем строку запроса из всех не пустых параметров
+                var searchQuery = new StringBuilder();
+                if (!string.IsNullOrEmpty(searchParams.Title))
+                    searchQuery.Append(searchParams.Title.ToLowerInvariant() + " ");
+                if (!string.IsNullOrEmpty(searchParams.Author))
+                    searchQuery.Append(searchParams.Author.ToLowerInvariant() + " ");
+                if (!string.IsNullOrEmpty(searchParams.Publisher))
+                    searchQuery.Append(searchParams.Publisher.ToLowerInvariant() + " ");
+                if (searchParams.Year.HasValue)
+                    searchQuery.Append(searchParams.Year.ToString() + " ");
+                if (!string.IsNullOrEmpty(searchParams.Keywords))
+                    searchQuery.Append(searchParams.Keywords.ToLowerInvariant() + " ");
+
+                // Удаляем лишний пробел в конце
+                var finalQuery = searchQuery.ToString().Trim();
+
+                // Проверяем, содержит ли контент все слова из запроса
+                return finalQuery.Split(' ').All(part => content.Contains(part));
             }
+        }
+        public class SearchParams
+        {
+            public string Title { get; set; }
+            public string Author { get; set; }
+            public string Publisher { get; set; }
+            public int? Year { get; set; }
+            public string Keywords { get; set; }
         }
     }
 }
