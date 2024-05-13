@@ -63,10 +63,11 @@ var app = builder.Build();
     app.UseSwaggerUI();
 
 
+
     app.UseStaticFiles(new StaticFileOptions()
 	{
 		FileProvider = new PhysicalFileProvider(
-			Path.Combine(builder.Environment.ContentRootPath, @"Client")),
+			Path.Combine(builder.Environment.ContentRootPath, @"wwwroot","pdfs")),
 		RequestPath = new PathString("/StaticFiles")
 	});
 	try
@@ -79,6 +80,8 @@ var app = builder.Build();
 	}
     app.UseHttpsRedirection();
     app.UseCors("MyAllowSpecificOrigins");
+    app.UseStaticFiles();
+   
     app.UseRouting();
     app.UseAuthentication();
 
@@ -100,7 +103,7 @@ var app = builder.Build();
 
     app.MapControllers();
     app.ConfigureSPA();
-    app.UseStaticFiles();
+    
     
     app.Run();
 

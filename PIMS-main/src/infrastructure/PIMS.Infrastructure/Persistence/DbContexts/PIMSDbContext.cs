@@ -51,6 +51,8 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
         /// <value>Значение набора баз данных (DbSet).</value>
         public DbSet<EventLog> EventLog { get; set; } = null!;
 
+        public DbSet<PdfDocument> PdfDocuments { get; set; }
+
         /// <summary>
         /// Создание модели.
         /// </summary>
@@ -61,6 +63,7 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
                 Ignore<IList<IDomainEvent>>().
                 ApplyConfigurationsFromAssembly(typeof(PIMSDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
+
         }
         /// <summary>
         /// По настройке.

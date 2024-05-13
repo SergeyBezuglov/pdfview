@@ -30,6 +30,31 @@ namespace PIMS.Migrations.MSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PdfDocuments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Publisher = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: true),
+                    FilePath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PdfDocuments", x => x.Id);
+                });
+            migrationBuilder.Sql("CREATE FULLTEXT CATALOG ftCatalog AS DEFAULT;", suppressTransaction: true);
+            migrationBuilder.Sql(@"
+                                    CREATE FULLTEXT INDEX ON PdfDocuments(Content) 
+                                    KEY INDEX PK_PdfDocuments 
+                                    ON ftCatalog
+                                    WITH STOPLIST = SYSTEM, CHANGE_TRACKING AUTO;
+                                ", suppressTransaction: true);
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -88,6 +113,9 @@ namespace PIMS.Migrations.MSQL.Migrations
         {
             migrationBuilder.DropTable(
                 name: "EventLog");
+
+            migrationBuilder.DropTable(
+                name: "PdfDocuments");
 
             migrationBuilder.DropTable(
                 name: "UserData");

@@ -110,6 +110,7 @@ namespace PIMS.Infrastructure
             #region Репозитории
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserDataRepository, UserDataRepository>();
+            services.AddScoped<IPdfDocumentRepository, PdfDocumentRepository>();
             #endregion Репозитории
             #region Кэш репозиториев
             //  services.Decorate<IUserRepository, CachedUserRepository>();

@@ -12,7 +12,7 @@ using PIMS.Infrastructure.Persistence.DbContexts;
 namespace PIMS.Migrations.MSQL.Migrations
 {
     [DbContext(typeof(PIMSDbContext))]
-    [Migration("20240502082911_InitialCreate")]
+    [Migration("20240513103400_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -56,6 +56,46 @@ namespace PIMS.Migrations.MSQL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EventLog", (string)null);
+                });
+
+            modelBuilder.Entity("PIMS.Domain.PdfDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Publisher")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PdfDocuments", (string)null);
                 });
 
             modelBuilder.Entity("PIMS.Domain.UserAggregate.User", b =>
