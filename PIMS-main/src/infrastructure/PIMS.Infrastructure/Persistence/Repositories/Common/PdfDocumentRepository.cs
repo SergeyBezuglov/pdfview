@@ -72,7 +72,12 @@ namespace PIMS.Infrastructure.Persistence.Repositories.Common
             if (!string.IsNullOrEmpty(searchParams.Keywords))
                 query = query.Where(doc => EF.Functions.FreeText(doc.Content, searchParams.Keywords));
 
-            return await query.ToListAsync();
+            return await _context.PdfDocuments
+               .Where(d => d.Content.Contains(searchParams.Query) ||
+                           d.Title.Contains(searchParams.Query) ||
+                           d.Author.Contains(searchParams.Query) ||
+                           d.Publisher.Contains(searchParams.Query))
+               .ToListAsync();
         }
     }
 }
