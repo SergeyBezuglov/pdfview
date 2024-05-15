@@ -1,16 +1,6 @@
 <template>
     <div class="search-container">
         <h1 class="textR">Расширенный поиск и загрузка</h1>
-
-        <!-- Форма загрузки файла -->
-        <input type="file" @change="handleFileUpload" class="file-input" />
-        <input class="search-input" v-model="uploadParams.title" placeholder="Название файла">
-        <input class="search-input" v-model="uploadParams.author" placeholder="Автор">
-        <input class="search-input" v-model="uploadParams.publisher" placeholder="Издательство">
-
-        <!-- Кнопка для загрузки файла -->
-        <button @click="uploadFile">Загрузить файл</button>
-
         <!-- Существующий функционал поиска -->
         <input class="search-input" v-model="searchParams.title" placeholder="Название">
         <input class="search-input" v-model="searchParams.author" placeholder="Автор">
@@ -23,15 +13,32 @@
         <div class="button-s-c">
             <button class="search-button" @click="searchPdf">Поиск</button>
             <button class="clear-button" @click="clearForm">Очистить</button>
+            <button @click="showUploadFields = !showUploadFields" class="toggle-upload-button">
+                {{ showUploadFields ? 'Скрыть форму загрузки' : 'Загрузить файл' }}
+            </button>
+        </div>
+        <div class="uploadfile-input" v-if="showUploadFields">
+            <input type="file" @change="handleFileUpload" class="file-input" />
+            <input class="search-input" v-model="uploadParams.title" placeholder="Название файла">
+            <input class="search-input" v-model="uploadParams.author" placeholder="Автор">
+            <input class="search-input" v-model="uploadParams.publisher" placeholder="Издательство">
+            <input class="search-input" v-model="uploadParams.year" placeholder="Год">
+            <input class="search-input" v-model="uploadParams.keyWords" placeholder="Ключевые слова">
+
+            <!-- Кнопка для загрузки файла -->
+            <button class="uploadFile" @click="uploadFile">Загрузить файл</button>
         </div>
         <ul class="search-results" v-if="searchResults.length">
-            <li v-for="document in searchResults" :key="document.id" @click="createPdf(document)">
+            <li class="file" v-for="document in searchResults"  @click="createPdf(document)">
                 <h3>{{ document.title }}</h3>
-                <p>Автор: {{document.author }}</p>
+                <p>File{{document.author }}</p>
             </li>
         </ul>
+        <!-- Форма загрузки файла -->
+
         <div v-if="error" class="error">{{ error }}</div>
         <iframe v-if="pdfUrl" class="pdf-iframe" :src="pdfUrl" frameborder="0"></iframe>
+
     </div>
 </template>
 
@@ -45,8 +52,11 @@
                 uploadParams: {
                     title: '',
                     author: '',
-                    publisher: ''
+                    publisher: '',
+                    year: '',
+                    keywords:''
                 },
+            showUploadFields: false,
                 searchParams: {
                     title: '',
                     author: '',
@@ -73,6 +83,8 @@
             formData.append('title', this.uploadParams.title);
             formData.append('author', this.uploadParams.author);
             formData.append('publisher', this.uploadParams.publisher);
+            formData.append('year', this.uploadParams.year); 
+            formData.append('keywords', this.uploadParams.keyWords);
 
             try {
                 const response = await axios.post('https://localhost:7085/Pdf/upload', formData, {
@@ -129,6 +141,8 @@
                 this.searchParams.keywords = '';
                 this.searchResults = [];
                 this.pdfUrl = '';
+                this.uploadParams = [];
+            
             }
         }
     }
@@ -136,13 +150,53 @@
 
 
 <style scoped>
+    .file{
+        margin-left:15px;
+    }
     .error {
         color: red;
         font-size: 16px;
     }
-    .button-s-c {
-        margin-top: 20px;
-    }
+
+.uploadfile-input{
+    margin-top:25px;
+}
+
+.clear-button:hover, .search-button:hover, .toggle-upload-button:hover {
+    background-color: #44bf60;
+}
+
+.toggle-upload-button {
+    background-color: #28a745; /* Зеленая кнопка для загрузки файла */
+    margin-left: 50px;
+    border-radius: 5px;
+}
+
+    .uploadFile {
+    background-color: #28a745; /* Зеленая кнопка для загрузки файла */
+    margin-left: 50px;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 10px;
+}
+
+
+.button-s-c {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.search-input, .file-input {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    
+}
 
     .clear-button, .search-button {
         padding: 10px 20px;
@@ -197,8 +251,11 @@
     }
 
     .search-results {
+        display:flex;
         list-style-type: none;
         padding: 0;
+        margin-top:25px;
+        justify-content:center;
     }
 
         .search-results li {
@@ -215,7 +272,8 @@
     .pdf-iframe {
         width: 70%;
         height: 70vh;
-        border: none;
+        border: 2px solid #ccc;
+        margin-top: 20px;
     }
 
     .textR {
