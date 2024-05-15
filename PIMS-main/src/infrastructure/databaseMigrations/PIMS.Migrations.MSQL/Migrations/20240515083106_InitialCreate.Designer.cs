@@ -12,7 +12,7 @@ using PIMS.Infrastructure.Persistence.DbContexts;
 namespace PIMS.Migrations.MSQL.Migrations
 {
     [DbContext(typeof(PIMSDbContext))]
-    [Migration("20240513103400_InitialCreate")]
+    [Migration("20240515083106_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -71,11 +71,16 @@ namespace PIMS.Migrations.MSQL.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Content")
+                    b.Property<byte[]>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Keywords")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");

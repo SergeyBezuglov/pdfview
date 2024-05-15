@@ -13,7 +13,8 @@ namespace PIMS.Domain
         public string Author { get; set; }
         public string Publisher {  get; set; }
         public int? Year {  get; set; }
-        public string FilePath { get; set; }
-        public string Content { get; set; } // Здесь будет храниться текст PDF
+        public string Keywords {  get; set; }
+        public byte[] Content { get; set; }  // Изменено на массив байтов
+        public string Extension { get; set; }  // Добавлено поле для расширения файла // Здесь будет храниться текст PDF
     }
 }

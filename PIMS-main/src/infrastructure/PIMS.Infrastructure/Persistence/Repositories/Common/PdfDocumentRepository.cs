@@ -61,23 +61,28 @@ namespace PIMS.Infrastructure.Persistence.Repositories.Common
         {
             var query = _context.PdfDocuments.AsQueryable();
 
+            // Фильтрация по ID, если указан
+            if (searchParams.Id.HasValue)
+                query = query.Where(doc => doc.Id == searchParams.Id.Value);
+
+            // Фильтрация по названию, автору, издателю и ключевым словам с использованием FullText Search, если доступно
             if (!string.IsNullOrEmpty(searchParams.Title))
                 query = query.Where(doc => EF.Functions.FreeText(doc.Title, searchParams.Title));
             if (!string.IsNullOrEmpty(searchParams.Author))
                 query = query.Where(doc => EF.Functions.FreeText(doc.Author, searchParams.Author));
             if (!string.IsNullOrEmpty(searchParams.Publisher))
                 query = query.Where(doc => EF.Functions.FreeText(doc.Publisher, searchParams.Publisher));
+
+            // Фильтрация по году, если указан
             if (searchParams.Year.HasValue)
                 query = query.Where(doc => doc.Year == searchParams.Year.Value);
-            if (!string.IsNullOrEmpty(searchParams.Keywords))
-                query = query.Where(doc => EF.Functions.FreeText(doc.Content, searchParams.Keywords));
 
-            return await _context.PdfDocuments
-               .Where(d => d.Content.Contains(searchParams.Query) ||
-                           d.Title.Contains(searchParams.Query) ||
-                           d.Author.Contains(searchParams.Query) ||
-                           d.Publisher.Contains(searchParams.Query))
-               .ToListAsync();
+            // Фильтрация по ключевым словам в содержимом документа
+            if (!string.IsNullOrEmpty(searchParams.Keywords))
+                query = query.Where(doc => EF.Functions.FreeText(doc.Keywords, searchParams.Keywords));
+
+            // Возврат результатов поиска
+            return await query.ToListAsync();
         }
     }
 }

@@ -6,6 +6,7 @@ using PIMS.Application.Common.Interfaces.Persistence;
 using Microsoft.EntityFrameworkCore;
 using PIMS.Application;
 using Path = System.IO.Path;
+using iTextSharp.text;
 namespace PIMS.Web.Controllers.v1
 {
     [ApiController]
@@ -23,9 +24,8 @@ namespace PIMS.Web.Controllers.v1
        
 
         [HttpGet("search-pdf")]
-        public async Task<IActionResult> Search(string query)
+        public async Task<IActionResult> Search([FromQuery]SearchParams searchParams)
         {
-            var searchParams = new SearchParams { Query = query };
             var documents = await _pdfDocumentRepository.SearchByParamsAsync(searchParams);
             return Ok(documents);
         }
@@ -50,7 +50,7 @@ namespace PIMS.Web.Controllers.v1
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadPdf(IFormFile file, [FromForm] string author, [FromForm] string publisher)
+        public async Task<IActionResult> UploadPdf(IFormFile file, [FromForm] string author, [FromForm] string publisher, [FromForm] string keyWords, [FromForm] int year)
         {
             if (file == null || file.Length == 0)
             {
@@ -64,46 +64,42 @@ namespace PIMS.Web.Controllers.v1
                 return BadRequest(new { success = false, message = "Invalid file name." });
             }
 
-            // Построение пути для сохранения файла
-            var path = Path.Combine(_hostingEnvironment.WebRootPath,  "pdfs", fileName);
-            if (string.IsNullOrEmpty(_hostingEnvironment.WebRootPath) || string.IsNullOrEmpty(fileName))
+            // Чтение файла в массив байтов
+            byte[] fileContent;
+            using (var memoryStream = new MemoryStream())
             {
-                return BadRequest(new { success = false, message = "Invalid file path or name." });
+                await file.CopyToAsync(memoryStream);
+                fileContent = memoryStream.ToArray();
             }
 
-            // Сохранение файла
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            var text = ExtractTextFromPdf(path);
+            // Создание нового документа для сохранения в базе данных
             var document = new Domain.PdfDocument
             {
                 Title = fileName,
                 Author = author,
                 Publisher = publisher,
-                Content = text,
-                FilePath = path
+                Keywords=keyWords,
+                Year=year,
+                Content = fileContent, // Теперь сохраняем массив байтов вместо пути файла
+                Extension = Path.GetExtension(file.FileName) // Добавление расширения файла
             };
 
+            // Добавление документа в базу данных
             await _pdfDocumentRepository.AddAsync(document);
 
             return Ok(new { success = true, message = "File uploaded successfully." });
         }
-        private string ExtractTextFromPdf(string path)
+        [HttpPost("create-pdf")]
+        public IActionResult CreatePdfFromData([FromBody] Domain.PdfDocument documentData)
         {
-            using (PdfReader reader = new PdfReader(path))
+            if (documentData == null || documentData.Content == null || documentData.Content.Length == 0)
             {
-                StringBuilder text = new StringBuilder();
-
-                for (int i = 1; i <= reader.NumberOfPages; i++)
-                {
-                    text.Append(PdfTextExtractor.GetTextFromPage(reader, i));
-                }
-
-                return text.ToString();
+                return BadRequest("Недостаточно данных для создания PDF.");
             }
+
+            // Просто возвращаем существующий PDF, если Content уже содержит данные PDF
+            return File(documentData.Content, "application/pdf", $"{documentData.Title}.pdf");
         }
+
     }
 }

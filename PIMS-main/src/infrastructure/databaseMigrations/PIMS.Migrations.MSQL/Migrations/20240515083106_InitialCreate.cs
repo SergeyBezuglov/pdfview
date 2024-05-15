@@ -39,21 +39,27 @@ namespace PIMS.Migrations.MSQL.Migrations
                     Author = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Publisher = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Year = table.Column<int>(type: "int", nullable: true),
-                    FilePath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Keywords = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Content = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Extension = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PdfDocuments", x => x.Id);
                 });
             migrationBuilder.Sql("CREATE FULLTEXT CATALOG ftCatalog AS DEFAULT;", suppressTransaction: true);
-            migrationBuilder.Sql(@"
-                                    CREATE FULLTEXT INDEX ON PdfDocuments(Content) 
-                                    KEY INDEX PK_PdfDocuments 
-                                    ON ftCatalog
-                                    WITH STOPLIST = SYSTEM, CHANGE_TRACKING AUTO;
-                                ", suppressTransaction: true);
-
+            migrationBuilder.Sql(@"CREATE FULLTEXT INDEX ON PdfDocuments
+                                 (
+                                     Title LANGUAGE 1049,
+                                     Author LANGUAGE 1049,
+                                     Publisher LANGUAGE 1049,
+                                     Keywords LANGUAGE 1049,
+                                     Content TYPE COLUMN Extension
+                                 ) 
+                                 KEY INDEX PK_PdfDocuments 
+                                 ON ftCatalog
+                                 WITH STOPLIST = SYSTEM, CHANGE_TRACKING AUTO;
+                             ", suppressTransaction: true);
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
