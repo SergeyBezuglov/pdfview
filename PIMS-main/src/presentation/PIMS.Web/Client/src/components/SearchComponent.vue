@@ -195,7 +195,7 @@
     width: 100%;
 }
 
-.clear-button:hover, .search-button:hover, .toggle-upload-button:hover {
+ .search-button:hover, .toggle-upload-button:hover {
     background-color: #44bf60;
 }
 
@@ -209,7 +209,8 @@
     background-color: #28a745; /* Зеленая кнопка для загрузки файла */
     border-radius: 5px;
     font-size: 16px;
-    padding: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
 }
 
 
@@ -244,8 +245,11 @@
         margin-left: 50px;
     }
 
-        .clear-button:hover, .search-button:hover {
+         .search-button:hover {
             background-color: #0056b3;
+        }
+        .clear-button:hover{
+            background-color: #bdbebd
         }
 
     .year-container {
@@ -273,19 +277,26 @@
     }
 
     .search-results {
-        max-width: 1000px;
-        width: 50%;
-        list-style-type: none;
-        padding: 10px;
-        margin-top:25px;
-        
-    }
+    display: flex;
+    flex-direction: row; /* Элементы выстраиваются в строку */
+    flex-wrap: wrap; /* Перенос элементов на новую строку при нехватке места */
+    justify-content: center; /* Выравнивание элементов по центру */
+    align-items: center; /* Выравнивание элементов по вертикали */
+    max-width: 1000px; /* Ограничение максимальной ширины */
+    width: 100%; /* Занимаем всю доступную ширину */
+    margin-top: 25px;
+    padding: 10px;
+    list-style-type: none; /* Убираем маркеры списка */
+}
 
         .search-results li {
             padding: 8px;
             cursor: pointer;
             background-color: #ffffff;
             border-bottom: 1px solid #cccccc;
+            max-width: 1000px;
+            width: 25%;
+            height: 10%;
         }
 
             .search-results li:hover {
