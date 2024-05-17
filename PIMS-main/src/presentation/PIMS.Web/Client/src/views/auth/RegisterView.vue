@@ -90,7 +90,7 @@ async function onLogin() {
     Email: register.value.email
   })
   if (registerResult.authenticated) {
-    router.push({ name: DefaultRouteSettings.Profile.Name })
+    router.push({ name: DefaultRouteSettings.Search.Name })
   }
 }
 </script>

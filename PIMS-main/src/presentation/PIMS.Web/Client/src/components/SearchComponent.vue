@@ -156,6 +156,8 @@
 <style scoped>
     .file{
         margin-left:15px;
+        margin-top: 10px;
+        max-width: 1000px;
     }
     .document-title {
         font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -271,11 +273,12 @@
     }
 
     .search-results {
-        display:flex;
+        max-width: 1000px;
+        width: 50%;
         list-style-type: none;
-        padding: 0;
+        padding: 10px;
         margin-top:25px;
-        justify-content:center;
+        
     }
 
         .search-results li {
