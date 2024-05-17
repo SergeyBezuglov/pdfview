@@ -50,7 +50,7 @@ namespace PIMS.Web.Controllers.v1
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadPdf(IFormFile file, [FromForm] string author, [FromForm] string publisher, [FromForm] string keyWords, [FromForm] int year)
+        public async Task<IActionResult> UploadPdf(IFormFile file, [FromForm] string author, [FromForm] string publisher, [FromForm] string keyWords, [FromForm] string documentType, [FromForm] int year)
         {
             if (file == null || file.Length == 0)
             {
@@ -80,6 +80,7 @@ namespace PIMS.Web.Controllers.v1
                 Publisher = publisher,
                 Keywords=keyWords,
                 Year=year,
+                DocumentType=documentType,
                 Content = fileContent, // Теперь сохраняем массив байтов вместо пути файла
                 Extension = Path.GetExtension(file.FileName) // Добавление расширения файла
             };

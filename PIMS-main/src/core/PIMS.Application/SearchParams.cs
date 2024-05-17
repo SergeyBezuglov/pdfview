@@ -14,5 +14,6 @@ namespace PIMS.Application
         public string Publisher { get; set; }
         public int? Year { get; set; }
         public string Keywords { get; set; }
+        public string DocumentType { get; set; }
     }
 }

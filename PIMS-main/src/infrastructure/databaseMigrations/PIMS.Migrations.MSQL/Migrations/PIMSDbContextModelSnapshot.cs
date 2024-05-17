@@ -72,6 +72,11 @@ namespace PIMS.Migrations.MSQL.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("DocumentType")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("Extension")
                         .IsRequired()
                         .HasMaxLength(10)

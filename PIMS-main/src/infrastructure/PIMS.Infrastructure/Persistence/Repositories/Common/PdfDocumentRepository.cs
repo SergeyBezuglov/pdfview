@@ -79,7 +79,7 @@ namespace PIMS.Infrastructure.Persistence.Repositories.Common
 
             // Фильтрация по ключевым словам в содержимом документа
             if (!string.IsNullOrEmpty(searchParams.Keywords))
-                query = query.Where(doc => EF.Functions.FreeText(doc.Keywords, searchParams.Keywords));
+                query = query.Where(doc => EF.Functions.FreeText(doc.Keywords, searchParams.Keywords) && doc.DocumentType == searchParams.DocumentType);
 
             // Возврат результатов поиска
             return await query.ToListAsync();

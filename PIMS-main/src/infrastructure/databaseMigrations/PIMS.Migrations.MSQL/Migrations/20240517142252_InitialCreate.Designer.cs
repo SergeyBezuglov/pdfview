@@ -12,7 +12,7 @@ using PIMS.Infrastructure.Persistence.DbContexts;
 namespace PIMS.Migrations.MSQL.Migrations
 {
     [DbContext(typeof(PIMSDbContext))]
-    [Migration("20240515083106_InitialCreate")]
+    [Migration("20240517142252_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -74,6 +74,11 @@ namespace PIMS.Migrations.MSQL.Migrations
                     b.Property<byte[]>("Content")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("DocumentType")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Extension")
                         .IsRequired()

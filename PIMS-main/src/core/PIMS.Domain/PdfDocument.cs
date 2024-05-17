@@ -14,6 +14,7 @@ namespace PIMS.Domain
         public string Publisher {  get; set; }
         public int? Year {  get; set; }
         public string Keywords {  get; set; }
+        public string DocumentType { get; set; }
         public byte[] Content { get; set; }  // Изменено на массив байтов
         public string Extension { get; set; }  // Добавлено поле для расширения файла 
     }
