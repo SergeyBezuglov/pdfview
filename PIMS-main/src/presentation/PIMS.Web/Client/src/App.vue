@@ -5,7 +5,7 @@
 
 <template>
   <v-app>
-    <SearchComponent/>
+    <!-- <SearchComponent/> -->
     
     <v-main>
       <router-view />

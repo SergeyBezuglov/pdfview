@@ -2,10 +2,14 @@
     <div class="search-container">
         <h1 class="textR">Расширенный поиск и загрузка</h1>
         <!-- Существующий функционал поиска -->
-        <input class="search-input" v-model="searchParams.title" placeholder="Название">
-        <input class="search-input" v-model="searchParams.author" placeholder="Автор">
-        <input class="search-input" v-model="searchParams.publisher" placeholder="Издательство">
-        <input class="search-input" v-model="searchParams.keywords" placeholder="Ключевые слова">
+
+        <div class="search-wrapper">
+            <input class="search-input" v-model="searchParams.title" placeholder="Название">
+            <input class="search-input" v-model="searchParams.author" placeholder="Автор">
+            <input class="search-input" v-model="searchParams.publisher" placeholder="Издательство">
+            <input class="search-input" v-model="searchParams.keywords" placeholder="Ключевые слова">
+        </div>
+
         <div class="year-container">
             <span class="year-label">{{ searchParams.year }}</span>
             <input type="range" class="year-slider" v-model="searchParams.year" min="1950" max="2024" placeholder="Год">
@@ -29,9 +33,9 @@
             <button class="uploadFile" @click="uploadFile">Загрузить файл</button>
         </div>
         <ul class="search-results" v-if="searchResults.length">
-            <li class="file" v-for="document in searchResults"  @click="createPdf(document)">
-                <h3>{{ document.title }}</h3>
-                <p>File{{document.author }}</p>
+            <li class="file" v-for="document in searchResults" :key="document.Id" @click="createPdf(document)">
+                <h3 class="document-title">{{ document.Title }}</h3>
+                <p>Автор: {{document.Author }}</p>
             </li>
         </ul>
         <!-- Форма загрузки файла -->
@@ -153,13 +157,40 @@
     .file{
         margin-left:15px;
     }
+    .document-title {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: 700;
+    }
     .error {
         color: red;
         font-size: 16px;
     }
 
+.search-wrapper, .uploadfile-input {
+    width: 90%;
+    max-width: 1000px;
+}
+
+.search-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .uploadfile-input{
     margin-top:25px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: auto;
+    gap: 10px;
+}
+
+.file-input {
+    grid-column: 1 / span 2;
+}
+
+.search-input {
+    width: 100%;
 }
 
 .clear-button:hover, .search-button:hover, .toggle-upload-button:hover {
@@ -172,9 +203,8 @@
     border-radius: 5px;
 }
 
-    .uploadFile {
+.uploadFile {
     background-color: #28a745; /* Зеленая кнопка для загрузки файла */
-    margin-left: 50px;
     border-radius: 5px;
     font-size: 16px;
     padding: 10px;
@@ -189,9 +219,7 @@
 }
 
 .search-input, .file-input {
-    width: 80%;
     padding: 10px;
-    margin-bottom: 10px;
     border: 2px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
@@ -222,6 +250,7 @@
         display: flex;
         align-items: center;
         margin-top: 10px;
+        width: 50%;
     }
 
     .year-label {
@@ -229,7 +258,7 @@
     }
 
     .year-slider {
-        width: 90vh;
+        width: 100%;
     }
 
     .search-container {
@@ -239,15 +268,6 @@
         background-color: #f4f4f4;
         padding: 20px;
         width: 100%;
-    }
-
-    .search-input {
-        width: 50%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 2px solid #ddd;
-        border-radius: 5px;
-        font-size: 16px;
     }
 
     .search-results {

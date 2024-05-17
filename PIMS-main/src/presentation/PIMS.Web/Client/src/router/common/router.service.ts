@@ -1,14 +1,14 @@
 export enum DefaultRoutePathes {
   NotSet = '',
-  Profile = '/',
+  Search = '/',
   LoginForms = '/loginForms',
   Error = '/error',
-  Register='/register'
+  Register='/register',
 }
 
 export enum DefaultRouteNames {
   NotSet = '',
-  Profile = 'profile',
+  Search = 'search',
   LoginForms = 'loginForms',
   Error = 'error',
   Register='registerForms'
@@ -26,11 +26,10 @@ export class DefaultRouteSettings {
     Path: DefaultRoutePathes.Error,
     Name: DefaultRouteNames.Error
   }
-  public static Profile: RouteSettings = {
-    Path: DefaultRoutePathes.Profile,
-    Name: DefaultRouteNames.Profile
+  public static Search: RouteSettings = {
+    Path: DefaultRoutePathes.Search,
+    Name: DefaultRouteNames.Search
   }
- 
 }
 export class RouteSettings {
   Path: DefaultRoutePathes = DefaultRoutePathes.Error

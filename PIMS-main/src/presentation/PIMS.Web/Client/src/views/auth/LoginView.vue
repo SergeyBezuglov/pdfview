@@ -51,7 +51,7 @@ async function onLogin() {
     Password: login.value.password
   })
   if (loginResult.authenticated) {
-    router.push({ name: DefaultRouteSettings.Profile.Name })
+    router.push({ name: DefaultRouteSettings.Search.Name })
   }
 }
 </script>

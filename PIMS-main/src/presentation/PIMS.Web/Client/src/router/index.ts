@@ -6,9 +6,9 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: DefaultRouteSettings.Profile.Path,
-      name: DefaultRouteSettings.Profile.Name,
-      component: import('../views/user/ProfileView.vue'),
+      path: DefaultRouteSettings.Search.Path,
+      name: DefaultRouteSettings.Search.Name,
+      component: () => import('../views/SearchView.vue'),
       meta: {
         requiresAuth: true
       }
@@ -56,9 +56,6 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  console.log('router.beforeEach')
-  authGuard(to, from, next)
-})
+router.beforeEach(authGuard)
 
 export default router

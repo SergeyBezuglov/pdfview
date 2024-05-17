@@ -2,6 +2,7 @@ import authStore from '@/stores/auth/authStore'
 import { type RouteLocationNormalized, type NavigationGuardNext } from 'vue-router'
 
 import { isTokenFromLocalStorageValid } from './auth.service'
+import { DefaultRouteNames } from '@/router/common/router.service'
 
 export const authGuard = async (
   to: RouteLocationNormalized,
@@ -19,10 +20,11 @@ export const authGuard = async (
       next()
       return
     }
-    const authResult = await authStoreContainer.challengeAuth()
-    if (!authResult.authenticated) {
-      next(authResult.path)
-    }
+    // const authResult = await authStoreContainer.challengeAuth()
+    // if (!authResult.authenticated) {
+    //   next(authResult.path)
+    // }
+    next({ name: DefaultRouteNames.LoginForms })
   }
 
   next()

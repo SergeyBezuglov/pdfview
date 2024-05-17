@@ -15,6 +15,6 @@ namespace PIMS.Domain
         public int? Year {  get; set; }
         public string Keywords {  get; set; }
         public byte[] Content { get; set; }  // Изменено на массив байтов
-        public string Extension { get; set; }  // Добавлено поле для расширения файла // Здесь будет храниться текст PDF
+        public string Extension { get; set; }  // Добавлено поле для расширения файла 
     }
 }
