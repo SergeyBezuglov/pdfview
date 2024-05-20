@@ -12,7 +12,7 @@ using PIMS.Infrastructure.Persistence.DbContexts;
 namespace PIMS.Migrations.MSQL.Migrations
 {
     [DbContext(typeof(PIMSDbContext))]
-    [Migration("20240517142252_InitialCreate")]
+    [Migration("20240520064642_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

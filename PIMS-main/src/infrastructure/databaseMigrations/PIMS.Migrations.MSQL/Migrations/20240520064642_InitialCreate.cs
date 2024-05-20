@@ -55,7 +55,7 @@ namespace PIMS.Migrations.MSQL.Migrations
                           Author LANGUAGE 1049,
                           Publisher LANGUAGE 1049,
                           Keywords LANGUAGE 1049,
-                          DocumentType LANGUAGE 1049, 
+                          DocumentType LANGUAGE 1049,
                           Content TYPE COLUMN Extension
                       ) 
                       KEY INDEX PK_PdfDocuments 

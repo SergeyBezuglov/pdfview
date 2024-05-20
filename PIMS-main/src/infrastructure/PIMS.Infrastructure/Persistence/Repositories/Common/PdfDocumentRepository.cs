@@ -77,9 +77,25 @@ namespace PIMS.Infrastructure.Persistence.Repositories.Common
             if (searchParams.Year.HasValue)
                 query = query.Where(doc => doc.Year == searchParams.Year.Value);
 
-            // Фильтрация по ключевым словам в содержимом документа
+            // Поиск по ключевым словам, если они указаны
             if (!string.IsNullOrEmpty(searchParams.Keywords))
-                query = query.Where(doc => EF.Functions.FreeText(doc.Keywords, searchParams.Keywords) && doc.DocumentType == searchParams.DocumentType);
+            {
+                var keywordQuery = query.Where(doc => EF.Functions.FreeText(doc.Keywords, searchParams.Keywords));
+                // Объединяем результаты поиска по ключевым словам и по типу документа
+                query = query.Concat(keywordQuery);
+            }
+
+            // Поиск по типу документа, если он указан
+            if (!string.IsNullOrEmpty(searchParams.DocumentType))
+            {
+                var docTypeQuery = _context.PdfDocuments.Where(doc => doc.DocumentType == searchParams.DocumentType);
+                // Объединяем результаты поиска по ключевым словам и по типу документа
+                query = query.Concat(docTypeQuery);
+            }
+
+            // Удаляем дубликаты документов, которые могли возникнуть при объединении результатов двух запросов
+            query = query.Distinct();
+
 
             // Возврат результатов поиска
             return await query.ToListAsync();
