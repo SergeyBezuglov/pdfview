@@ -80,21 +80,9 @@ namespace PIMS.Infrastructure.Persistence.Repositories.Common
             // Поиск по ключевым словам, если они указаны
             if (!string.IsNullOrEmpty(searchParams.Keywords))
             {
-                var keywordQuery = query.Where(doc => EF.Functions.FreeText(doc.Keywords, searchParams.Keywords));
-                // Объединяем результаты поиска по ключевым словам и по типу документа
-                query = query.Concat(keywordQuery);
+                query = query.Where(doc => EF.Functions.FreeText(doc.Keywords, searchParams.Keywords)
+                                           || doc.DocumentType == searchParams.Keywords);
             }
-
-            // Поиск по типу документа, если он указан
-            if (!string.IsNullOrEmpty(searchParams.DocumentType))
-            {
-                var docTypeQuery = _context.PdfDocuments.Where(doc => doc.DocumentType == searchParams.DocumentType);
-                // Объединяем результаты поиска по ключевым словам и по типу документа
-                query = query.Concat(docTypeQuery);
-            }
-
-            // Удаляем дубликаты документов, которые могли возникнуть при объединении результатов двух запросов
-            query = query.Distinct();
 
 
             // Возврат результатов поиска
