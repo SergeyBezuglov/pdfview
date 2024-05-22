@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
-using PIMS.Application.Common.Interfaces.Persistence;
-using Microsoft.EntityFrameworkCore;
 using PIMS.Application;
+using PIMS.Application.Common.Interfaces.Persistence;
 using Path = System.IO.Path;
-using iTextSharp.text;
 namespace PIMS.Web.Controllers.v1
 {
     [ApiController]
@@ -79,7 +74,7 @@ namespace PIMS.Web.Controllers.v1
                 Author = author,
                 Publisher = publisher,
                 Keywords=keyWords,
-                Year=year,
+                Year =year,
                 DocumentType=documentType,
                 Content = fileContent, // Теперь сохраняем массив байтов вместо пути файла
                 Extension = Path.GetExtension(file.FileName) // Добавление расширения файла
